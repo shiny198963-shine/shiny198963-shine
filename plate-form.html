@@ -47,7 +47,7 @@ button.copy { display: block; width: 100%; margin-top: 10px; padding: 10px; font
 <h1>株式会社シャイニー</h1>
 <p>シンプルプレート作成フォーム</p>
 </header>
-<div class="trial">これは試作ページです（価格はまだ仮です）</div>
+<div class="trial">これは試作ページです</div>
 <main>
 <div class="wrap">
 
@@ -76,8 +76,17 @@ button.copy { display: block; width: 100%; margin-top: 10px; padding: 10px; font
 </div>
 <label class="flabel" for="qty">数量</label>
 <input type="number" id="qty" value="1" min="1" max="999" style="max-width:140px"> 枚
+<h2>3. 裏面の仕上げ</h2>
+<p class="note" style="margin-top:0">裏面は両面テープが標準です。不要な場合は「つけない」を選んでください。</p>
+<div class="toggle" id="tapeOpts">
+<div class="opt sel" data-v="つける（標準）">両面テープ：つける（標準）</div>
+<div class="opt" data-v="つけない">両面テープ：つけない</div>
+</div>
+<label class="flabel">追加オプション（任意）</label>
+<label style="display:block;margin:6px 0"><input type="checkbox" class="optcheck" value="クリップ"> クリップ</label>
+<label style="display:block;margin:6px 0"><input type="checkbox" class="optcheck" value="挟み込みベロ"> 挟み込みベロ</label>
 
-<h2>3. 文字を入れる／データ入稿</h2>
+<h2>4. 文字を入れる／データ入稿</h2>
 <div class="toggle" id="modeToggle">
 <div class="opt sel" data-v="text">文字入力</div>
 <div class="opt" data-v="data">データ入稿</div>
@@ -103,7 +112,7 @@ button.copy { display: block; width: 100%; margin-top: 10px; padding: 10px; font
 <p class="note">※ ファイルはこのページからは送れません。「注文する」で開くメールに、このファイルを添付して送信してください。</p>
 </div>
 
-<h2>4. お客様情報</h2>
+<h2>5. お客様情報</h2>
 <label class="flabel" for="uname">お名前（必須）</label>
 <input type="text" id="uname" placeholder="例：山田 太郎">
 <label class="flabel" for="umail">メールアドレス（必須）</label>
@@ -111,8 +120,8 @@ button.copy { display: block; width: 100%; margin-top: 10px; padding: 10px; font
 <label class="flabel" for="umemo">備考（任意）</label>
 <textarea id="umemo" placeholder="ご希望があればどうぞ"></textarea>
 
-<h2>5. 注文内容の確認</h2>
-<p class="price">価格：一律（試作のため金額は未設定）</p>
+<h2>6. 注文内容の確認</h2>
+<p class="price">価格：一律 5,000円（1枚）＋ 送料</p>
 <p class="note">【完成イメージの事前確認】ご注文後、製作前に完成イメージをお送りします。内容をご確認いただき、OKをいただいてから製作しますのでご安心ください。</p>
 <p class="note">【納期の目安】完成イメージのご確認をいただいてから製作に入ります。発送までの目安は、確認のメールにてご案内します。</p>
 <div class="summary" id="summary"></div>
@@ -124,7 +133,7 @@ button.copy { display: block; width: 100%; margin-top: 10px; padding: 10px; font
 </div>
 </main>
 <script>
-var state = { material: "真鍮", color: "金", matClass: "m-gold", size: "小 100×30mm", w: 300, h: 90, mode: "text", font: "ゴシック体", fontClass: "f-gothic", fileName: ""};
+var state = { material: "真鍮", color: "金", matClass: "m-gold", tape: "つける（標準）", size: "小 100×30mm", w: 300, h: 90, mode: "text", font: "ゴシック体", fontClass: "f-gothic", fileName: ""};
 
 function pick(containerId, cb) {
 var box = document.getElementById(containerId);
@@ -142,6 +151,8 @@ document.getElementById("textMode").style.display = d.v === "text"? "": "none";
 document.getElementById("dataMode").style.display = d.v === "data"? "": "none";
 render();
 });
+pick("tapeOpts", function (d) { state.tape = d.v; render();});
+document.querySelectorAll(".optcheck").forEach(function (c) { c.addEventListener("change", render);});
 document.getElementById("font").addEventListener("change", function () {
 var o = this.options[this.selectedIndex];
 state.font = o.dataset.v; state.fontClass = o.value; render();
@@ -161,6 +172,10 @@ lines.push("");
 lines.push("素材：真鍮（色：" + state.color + "）");
 lines.push("サイズ：" + state.size);
 lines.push("数量：" + (val("qty") || "1") + "枚");
+lines.push("裏面テープ：" + state.tape);
+var opts = [];
+document.querySelectorAll(".optcheck").forEach(function (c) { if (c.checked) opts.push(c.value);});
+if (opts.length) lines.push("追加オプション：" + opts.join("、"));
 if (state.mode === "text") {
 lines.push("文字（1行目）：" + (val("line1") || "（未入力）"));
 if (val("line2")) lines.push("文字（2行目）：" + val("line2"));
@@ -168,7 +183,8 @@ lines.push("書体：" + state.font);
 } else {
 lines.push("データ入稿：" + (state.fileName || "（ファイル未選択）") + " ※メールに添付します");
 }
-lines.push("価格：一律（金額は別途ご案内）");
+var q = parseInt(val("qty") || "1", 10); if (isNaN(q) || q < 1) q = 1;
+lines.push("価格：5,000円 × " + q + "枚 = " + (5000 * q).toLocaleString() + "円 ＋ 送料");
 lines.push("お名前：" + (val("uname") || "（未入力）"));
 lines.push("メール：" + (val("umail") || "（未入力）"));
 if (val("umemo")) lines.push("備考：" + val("umemo"));

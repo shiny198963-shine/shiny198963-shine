@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>シンプルプレート作成フォーム（試作） | 株式会社シャイニー</title>
+<style>
+* { box-sizing: border-box;}
+body { font-family: sans-serif; line-height: 1.8; margin: 0; color: #2b2b2b; background: #faf8f5;}
+header { background: #1e3a52; color: #fff; padding: 28px 16px; text-align: center;}
+header h1 { margin: 0; font-size: 1.4em; letter-spacing:.08em;}
+header p { margin: 6px 0 0; font-size:.9em; opacity:.85;}
+.trial { background: #b08d57; color: #fff; text-align: center; padding: 6px 12px; font-size:.85em;}
+main { padding: 8px 16px 48px;}
+.wrap { max-width: 720px; margin: 0 auto;}
+h2 { font-size: 1.15em; border-left: 6px solid #b08d57; padding-left: 10px; margin: 34px 0 12px;}
+.opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px;}
+.opt { background: #fff; border: 2px solid #e5ded0; border-radius: 6px; padding: 12px; cursor: pointer; text-align: center;}
+.opt.sel { border-color: #1e3a52; background: #eef3f7; font-weight: bold;}
+.opt small { display: block; font-weight: normal; color: #666;}
+.preview-box { background: #fff; border: 1px solid #e5ded0; border-radius: 6px; padding: 24px 16px; text-align: center;}
+.plate { margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,.25); padding: 10px; transition: all.2s; max-width: 100%;}
+.plate.l1 { font-size: 1.5em; line-height: 1.3; letter-spacing:.1em;}
+.plate.l2 { font-size: 1em; line-height: 1.3; letter-spacing:.08em;}
+.m-gold { background: linear-gradient(135deg, #f0dcae, #c9a45c 55%, #e6cd8f); color: #4a3812;}
+.m-silver { background: linear-gradient(135deg, #f2f2f2, #c6c9cd 55%, #e4e7ea); color: #333;}
+.m-copper { background: linear-gradient(135deg, #f3c9a8, #b87333 55%, #e2a97e); color: #3d1e0d;}
+
+.f-gothic { font-family: sans-serif;}
+.f-mincho { font-family: serif;}
+.f-maru { font-family: "Hiragino Maru Gothic ProN", "HG丸ｺﾞｼｯｸM-PRO", sans-serif;}
+label.flabel { display: block; margin: 14px 0 4px; font-weight: bold; font-size:.95em;}
+input[type="text"], input[type="email"], select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; background: #fff;}
+textarea { min-height: 70px;}
+.toggle { display: flex; gap: 10px;}
+.toggle.opt { flex: 1;}
+.summary { background: #f6f1e7; border: 1px solid #e5ded0; border-radius: 6px; padding: 16px 20px; white-space: pre-wrap; font-size:.95em;}
+.price { font-size: 1.1em; font-weight: bold; color: #1e3a52;}
+button.order { display: block; width: 100%; margin-top: 18px; padding: 16px; font-size: 1.1em; font-weight: bold; color: #fff; background: #1e3a52; border: none; border-radius: 6px; cursor: pointer;}
+button.copy { display: block; width: 100%; margin-top: 10px; padding: 10px; font-size:.95em; background: #fff; border: 1px solid #1e3a52; color: #1e3a52; border-radius: 6px; cursor: pointer;}
+.note { font-size:.85em; color: #666;}
+.err { color: #b00020; font-size:.9em; min-height: 1.4em;}
+</style>
+</head>
+<body>
+<header>
+<h1>株式会社シャイニー</h1>
+<p>シンプルプレート作成フォーム</p>
+</header>
+<div class="trial">これは試作ページです（価格はまだ仮です）</div>
+<main>
+<div class="wrap">
+
+<h2>プレビュー</h2>
+<div class="preview-box">
+<div class="plate m-gold f-gothic" id="plate" style="width:300px;height:90px">
+<div class="l1" id="pv1">（文字サンプル）</div>
+<div class="l2" id="pv2"></div>
+</div>
+<p class="note" id="pvMeta">真鍮（金）／ 小 100×30mm</p>
+</div>
+
+<h2>1. 真鍮の色えらぶ</h2>
+<div class="opts" id="materials">
+<div class="opt sel" data-v="金" data-c="m-gold">金<small>温かみのある金色</small></div>
+<div class="opt" data-v="銀" data-c="m-silver">銀<small>落ち着いた銀色</small></div>
+<div class="opt" data-v="銅" data-c="m-copper">銅<small>赤みのある銅色</small></div>
+
+</div>
+
+<h2>2. サイズえらぶ</h2>
+<div class="opts" id="sizes">
+<div class="opt sel" data-v="小 100×30mm" data-w="300" data-h="90">小<small>100×30mm</small></div>
+<div class="opt" data-v="中 150×50mm" data-w="375" data-h="125">中<small>150×50mm</small></div>
+<div class="opt" data-v="大 200×70mm" data-w="440" data-h="154">大<small>200×70mm</small></div>
+</div>
+<label class="flabel" for="qty">数量</label>
+<input type="number" id="qty" value="1" min="1" max="999" style="max-width:140px"> 枚
+
+<h2>3. 文字を入れる／データ入稿</h2>
+<div class="toggle" id="modeToggle">
+<div class="opt sel" data-v="text">文字入力</div>
+<div class="opt" data-v="data">データ入稿</div>
+</div>
+
+<div id="textMode">
+<label class="flabel" for="line1">1行目</label>
+<input type="text" id="line1" placeholder="例：山田 太郎" maxlength="20">
+<label class="flabel" for="line2">2行目（任意）</label>
+<input type="text" id="line2" placeholder="例：YAMADA TARO" maxlength="30">
+<label class="flabel" for="font">書体えらぶ</label>
+<select id="font">
+<option value="f-gothic" data-v="ゴシック体">ゴシック体</option>
+<option value="f-mincho" data-v="明朝体">明朝体</option>
+<option value="f-maru" data-v="丸ゴシック体">丸ゴシック体</option>
+</select>
+</div>
+
+<div id="dataMode" style="display:none">
+<label class="flabel" for="file">入稿データ（Illustrator / PDF / 画像など）</label>
+<input type="file" id="file">
+<p class="note">【入稿データについて】対応形式：AI / PDF / EPS / 画像（JPG・PNG）。Illustratorデータは文字のアウトライン化をお願いします。画像データは大きめのサイズでお送りください。</p>
+<p class="note">※ ファイルはこのページからは送れません。「注文する」で開くメールに、このファイルを添付して送信してください。</p>
+</div>
+
+<h2>4. お客様情報</h2>
+<label class="flabel" for="uname">お名前（必須）</label>
+<input type="text" id="uname" placeholder="例：山田 太郎">
+<label class="flabel" for="umail">メールアドレス（必須）</label>
+<input type="email" id="umail" placeholder="例：example@mail.jp">
+<label class="flabel" for="umemo">備考（任意）</label>
+<textarea id="umemo" placeholder="ご希望があればどうぞ"></textarea>
+
+<h2>5. 注文内容の確認</h2>
+<p class="price">価格：一律（試作のため金額は未設定）</p>
+<p class="note">【完成イメージの事前確認】ご注文後、製作前に完成イメージをお送りします。内容をご確認いただき、OKをいただいてから製作しますのでご安心ください。</p>
+<p class="note">【納期の目安】完成イメージのご確認をいただいてから製作に入ります。発送までの目安は、確認のメールにてご案内します。</p>
+<div class="summary" id="summary"></div>
+<p class="err" id="err"></p>
+<button class="order" id="orderBtn">この内容で注文する（メールが開きます）</button>
+<button class="copy" id="copyBtn">注文内容をコピーする</button>
+<p class="note">「注文する」を押すとメールアプリが開きます。内容を確認して送信してください。データ入稿の方はファイルの添付をお忘れなく。</p>
+
+</div>
+</main>
+<script>
+var state = { material: "真鍮", color: "金", matClass: "m-gold", size: "小 100×30mm", w: 300, h: 90, mode: "text", font: "ゴシック体", fontClass: "f-gothic", fileName: ""};
+
+function pick(containerId, cb) {
+var box = document.getElementById(containerId);
+box.addEventListener("click", function (e) {
+var t = e.target.closest(".opt"); if (!t) return;
+box.querySelectorAll(".opt").forEach(function (o) { o.classList.remove("sel");});
+t.classList.add("sel"); cb(t.dataset);
+});
+}
+pick("materials", function (d) { state.color = d.v; state.matClass = d.c; render();});
+pick("sizes", function (d) { state.size = d.v; state.w = +d.w; state.h = +d.h; render();});
+pick("modeToggle", function (d) {
+state.mode = d.v;
+document.getElementById("textMode").style.display = d.v === "text"? "": "none";
+document.getElementById("dataMode").style.display = d.v === "data"? "": "none";
+render();
+});
+document.getElementById("font").addEventListener("change", function () {
+var o = this.options[this.selectedIndex];
+state.font = o.dataset.v; state.fontClass = o.value; render();
+});
+["line1", "line2", "qty", "uname", "umail", "umemo"].forEach(function (id) {
+document.getElementById(id).addEventListener("input", render);
+});
+document.getElementById("file").addEventListener("change", function () {
+state.fileName = this.files.length? this.files[0].name: ""; render();
+});
+
+function val(id) { return document.getElementById(id).value.trim();}
+
+function orderText() {
+var lines = [];
+lines.push("");
+lines.push("素材：真鍮（色：" + state.color + "）");
+lines.push("サイズ：" + state.size);
+lines.push("数量：" + (val("qty") || "1") + "枚");
+if (state.mode === "text") {
+lines.push("文字（1行目）：" + (val("line1") || "（未入力）"));
+if (val("line2")) lines.push("文字（2行目）：" + val("line2"));
+lines.push("書体：" + state.font);
+} else {
+lines.push("データ入稿：" + (state.fileName || "（ファイル未選択）") + " ※メールに添付します");
+}
+lines.push("価格：一律（金額は別途ご案内）");
+lines.push("お名前：" + (val("uname") || "（未入力）"));
+lines.push("メール：" + (val("umail") || "（未入力）"));
+if (val("umemo")) lines.push("備考：" + val("umemo"));
+return lines.join("\n");
+}
+
+function render() {
+var plate = document.getElementById("plate");
+plate.className = "plate " + state.matClass + " " + state.fontClass;
+plate.style.width = state.w + "px"; plate.style.height = state.h + "px";
+document.getElementById("pv1").textContent = state.mode === "text"? (val("line1") || "（文字サンプル）"): "データ入稿";
+document.getElementById("pv2").textContent = state.mode === "text"? val("line2"): "";
+document.getElementById("pvMeta").textContent = "真鍮（" + state.color + "）／ " + state.size + (state.mode === "text"? " ／ " + state.font: " ／ データ入稿");
+document.getElementById("summary").textContent = orderText();
+}
+
+document.getElementById("orderBtn").addEventListener("click", function () {
+var err = "";
+if (!val("uname")) err = "お名前を入力してください。";
+else if (!val("umail")) err = "メールアドレスを入力してください。";
+else if (state.mode === "text" &&!val("line1")) err = "1行目の文字を入力してください。";
+document.getElementById("err").textContent = err;
+if (err) return;
+var subject = encodeURIComponent("" + val("uname") + "様");
+var body = encodeURIComponent(orderText());
+location.href = "mailto:yama-muse@muse.ai?subject=" + subject + "&body=" + body;
+});
+document.getElementById("copyBtn").addEventListener("click", function () {
+navigator.clipboard && navigator.clipboard.writeText(orderText());
+this.textContent = "コピーしました";
+var b = this; setTimeout(function () { b.textContent = "注文内容をコピーする";}, 2000);
+});
+
+render();
+</script>
+</body>
+</html>

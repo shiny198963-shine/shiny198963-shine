@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>ご注文の進捗確認（見本） | 株式会社シャイニー</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: sans-serif; line-height: 1.8; margin: 0; color: #2b2b2b; background: #faf8f5; }
+header { background: #1e3a52; color: #fff; padding: 28px 16px; text-align: center; }
+header h1 { margin: 0; font-size: 1.4em; letter-spacing: .08em; }
+header p { margin: 6px 0 0; font-size: .9em; opacity: .85; }
+.trial { background: #b08d57; color: #fff; text-align: center; padding: 6px 12px; font-size: .85em; }
+main { padding: 8px 16px 48px; }
+.wrap { max-width: 720px; margin: 0 auto; }
+h2 { font-size: 1.15em; border-left: 6px solid #b08d57; padding-left: 10px; margin: 34px 0 12px; }
+.card { background: #fff; border: 1px solid #e5ded0; border-radius: 6px; padding: 18px 20px; }
+.card dl { margin: 0; display: grid; grid-template-columns: 7.5em 1fr; row-gap: 6px; }
+.card dt { font-weight: bold; color: #1e3a52; }
+.card dd { margin: 0; }
+.now { background: #eef3f7; border: 1px solid #1e3a52; border-radius: 6px; padding: 16px 20px; }
+.now strong { color: #1e3a52; font-size: 1.1em; }
+.steps { display: flex; margin: 26px 0 6px; padding: 0; list-style: none; }
+.step { flex: 1; text-align: center; position: relative; font-size: .88em; color: #999; }
+.step::before { content: ""; display: block; width: 30px; height: 30px; margin: 0 auto 6px; border-radius: 50%; background: #e5ded0; border: 2px solid #e5ded0; position: relative; z-index: 1; }
+.step::after { content: ""; position: absolute; top: 16px; left: calc(-50% + 17px); width: calc(100% - 34px); height: 3px; background: #e5ded0; }
+.step:first-child::after { display: none; }
+.step.done { color: #2b2b2b; }
+.step.done::before { background: #b08d57; border-color: #b08d57; }
+.step.done::after { background: #b08d57; }
+.step.current { color: #1e3a52; font-weight: bold; }
+.step.current::before { background: #fff; border-color: #1e3a52; box-shadow: 0 0 0 4px #cfe0ee; }
+.step.current::after { background: #b08d57; }
+.step small { display: block; font-weight: normal; color: #666; }
+.log { list-style: none; margin: 0; padding: 0; }
+.log li { background: #fff; border: 1px solid #e5ded0; border-radius: 6px; padding: 12px 16px; margin-bottom: 10px; }
+.log .date { font-size: .85em; color: #666; }
+.log p { margin: 2px 0 0; }
+.log li.alert { border-color: #c0392b; background: #fdf1ef; }
+.log li.alert .tag { display: inline-block; background: #c0392b; color: #fff; font-size: .78em; padding: 0 8px; border-radius: 3px; margin-left: 6px; vertical-align: middle; }
+.note { font-size: .85em; color: #666; }
+.updated { text-align: right; font-size: .85em; color: #666; margin-top: 8px; }
+</style>
+</head>
+<body>
+<header>
+<h1>株式会社シャイニー</h1>
+<p>ご注文の進捗確認</p>
+</header>
+<div class="trial">これは見本ページです（内容はダミーです）</div>
+<main>
+<div class="wrap">
+
+<h2>○○様 受注分</h2>
+<div class="card">
+<dl>
+<dt>受注番号</dt><dd>SAMPLE-001</dd>
+<dt>品物名</dt><dd>真鍮プレート（金）中 150×50mm × 10枚</dd>
+<dt>受注日</dt><dd>2026年11月27日</dd>
+<dt>納品予定日</dt><dd>2026年12月10日</dd>
+</dl>
+</div>
+
+<ol class="steps">
+<li class="step done">受注<small>11月27日</small></li>
+<li class="step current">工場なう<small>製造中</small></li>
+<li class="step">検品なう<small>まだ</small></li>
+<li class="step">納品<small>12月10日予定</small></li>
+</ol>
+
+<div class="now">
+<strong>現在の工程：工場で製造中です</strong><br>
+ご注文のプレートを工場で製作しています。工程が進みましたら、このページを更新します。
+</div>
+<p class="updated">最終更新：2026年11月27日</p>
+
+<h2>ご連絡・トラブル報告</h2>
+<ul class="log">
+<li class="alert">
+<span class="date">11月28日</span><span class="tag">トラブル報告（見本）</span>
+<p>検品前の確認で、10枚のうち1枚に小さなキズが見つかりました。その1枚は作り直し中です。納品予定日（12月10日）に変更はありません。</p>
+</li>
+<li>
+<span class="date">11月28日</span>
+<p>工場で製造を開始しました。</p>
+</li>
+<li>
+<span class="date">11月27日</span>
+<p>ご注文を受注しました。納品予定日は12月10日です。</p>
+</li>
+</ul>
+
+<h2>お問い合わせ</h2>
+<p class="note">進捗についてご不明な点がありましたら、受注番号（SAMPLE-001）を添えてメールでご連絡ください：<a href="mailto:yama-muse@muse.ai">yama-muse@muse.ai</a></p>
+<p class="note">※ このページはお客様専用です。URLはほかの方と共有しないようお願いします。</p>
+
+</div>
+</main>
+</body>
+</html>
